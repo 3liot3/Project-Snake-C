@@ -2,81 +2,95 @@
 
 int main()
 {
-    int pos_x = 0;
-    int pos_y = 0;
-
     int pos_x_pomme = 5;
     int pos_y_pomme = 5;
-
     int score = 0;
+    char direction = 'n'; // -g : gauche -d : droite -h : haut -b : bas
 
-    char direction = 'n';// -g : gauche -d : droite -h : haut -b : bas
+    /// Initialisation du serpent
+    FileSerpent serpent;
+    initialiserSerpent(&serpent, 0, 0);
 
-    ///Initialisation du plateau de jeu
-    char plateau[10][20] = {
-        "0###################",
-        "####################",
-        "####################",
-        "####################",
-        "####################",
-        "####################",
-        "####################",
-        "####################",
-        "####################",
-        "####################"
-    };
+    while (1)
+    {
+        /// On efface la console
+        system("cls"); // plus lent
+        // printf("\033[H");
+        // printf("\033[2J");
 
-    while (1) {
-        ///On efface la console
-        //system("cls"); // plus lent
-        printf("\033[H");
-        ///On affiche le plateau de jeu
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 20; j++) {
-                if(j == pos_x && i == pos_y){
-                    plateau[i][j] = '0';
+        /// On affiche le plateau de jeu
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 20; j++)
+            {
+                Membre *membre = serpent.premier;
+                int membreAffiche = 0;
+
+                while (membre != NULL)
+                {
+                    if (j == membre->x && i == membre->y)
+                    {
+                        printf("0");
+                        membreAffiche = 1;
+                        break;
+                    }
+
+                    membre = membre->suivant;
                 }
-                else if(j == pos_x_pomme && i == pos_y_pomme){
-                    plateau[i][j] = '*';
+
+                if (!membreAffiche)
+                {
+                    if (j == pos_x_pomme && i == pos_y_pomme)
+                    {
+                        printf("*");
+                    }
+                    else
+                    {
+                        printf("#");
+                    }
                 }
-                else{
-                    plateau[i][j] = '#';
-                }
-                printf("%c", plateau[i][j]);
             }
             printf("\n");
         }
-        if(pos_x == pos_x_pomme && pos_y == pos_y_pomme){
-            pomme_manger(pos_x, pos_y, &pos_x_pomme, &pos_y_pomme, &score);
+
+        printf("[ %d : %d ]", serpent.premier->x, serpent.premier->y);
+        printf("\n[ %d : %d ]", pos_x_pomme, pos_y_pomme);
+        printf("\n[ %d pts ]", score);
+
+        if (serpent.premier->x == pos_x_pomme && serpent.premier->y == pos_y_pomme)
+        {
+            mettreAJourPomme(&serpent, &pos_x_pomme, &pos_y_pomme, &score);
         }
-        //On ralenti l'execution pour ne pas que ca soit trop dur
+
+        // On ralentit l'exécution pour ne pas que ce soit trop rapide
         sleep(1);
 
-        if (kbhit()) {
+        if (kbhit())
+        {
             char touche = getch();
-            switch (touche) {
-                case 'z':
-                    direction = 'h';
-                    break;
-                case 'q':
-                    direction = 'g';
-                    break;
-                case 'd':
-                    direction = 'd';
-                    break;
-                case 's':
-                    direction = 'b';
-                    break;
+            switch (touche)
+            {
+            case 'z':
+                direction = 'h';
+                break;
+            case 'q':
+                direction = 'g';
+                break;
+            case 'd':
+                direction = 'd';
+                break;
+            case 's':
+                direction = 'b';
+                break;
             }
         }
 
-        deplacement(&pos_x, &pos_y, direction);
-        printf("[ %d : %d ]", pos_x, pos_y);
-        printf("\n[ %d : %d ]", pos_x_pomme, pos_y_pomme);
-        printf("\n[ %d pts ]", score);
+        deplacement(&serpent, direction);
     }
+
     return 0;
 }
+
 ///TODO
 //============================== ◄ SPAWN DE POMME ET COLLISION ► ========================================
 
