@@ -24,6 +24,7 @@ typedef struct FileSerpent
 void initialiserSerpent(FileSerpent *serpent, int x, int y);
 void enfile(FileSerpent *serpent, int x, int y);
 void defile(FileSerpent *serpent);
+void nouveauMembre(FileSerpent *serpent, int x, int y);
 ///=====================================================================================
 
 ///=====================================================================================
@@ -32,4 +33,3 @@ void pommeMangee(FileSerpent *serpent, int *pos_x_pomme, int *pos_y_pomme, int *
 ///=====================================================================================
 
 #endif // SNAKE_H_INCLUDED
-

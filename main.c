@@ -1,5 +1,6 @@
 #include "snake.h"
-
+#include <stdio.h>
+#include <Windows.h>
 int main()
 {
     int pos_x_pomme = 5;
@@ -9,53 +10,47 @@ int main()
 
     /// Initialisation du serpent
     FileSerpent serpent;
-    initialiserSerpent(&serpent, 0, 0);
+    initialiserSerpent(&serpent, 1, 1);
 
     while (1)
     {
         /// On efface la console
-        system("cls"); // plus lent
-        // printf("\033[H");
+        //system("cls"); // plus lent
+        printf("\033[H");
         // printf("\033[2J");
 
         /// On affiche le plateau de jeu
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i <= 12; i++)
         {
-            for (int j = 0; j < 20; j++)
+            for (int j = 0; j <= 22; j++)
             {
                 Membre *membre = serpent.premier;
-                int membreAffiche = 0;
-
-                while (membre != NULL)
-                {
-                    if (j == membre->x && i == membre->y)
-                    {
-                        printf("0");
-                        membreAffiche = 1;
-                        break;
-                    }
-
-                    membre = membre->suivant;
+                if(i == 0 || i == 12 || j == 0 || j == 22){
+                    printf("=");
                 }
+                else{
+                    while (membre != NULL){
+                        if (j == membre->x && i == membre->y){
+                            printf("0");
+                        }
+                        else if(j == pos_x_pomme && i == pos_y_pomme){
+                            printf("*");
+                        }
+                        else{
+                            printf("-");
+                        }
+                        membre = membre->suivant;
 
-                if (!membreAffiche)
-                {
-                    if (j == pos_x_pomme && i == pos_y_pomme)
-                    {
-                        printf("*");
-                    }
-                    else
-                    {
-                        printf("#");
                     }
                 }
             }
             printf("\n");
         }
 
-        printf("[ %d : %d ]", serpent.premier->x, serpent.premier->y);
-        printf("\n[ %d : %d ]", pos_x_pomme, pos_y_pomme);
-        printf("\n[ %d pts ]", score);
+        printf("pos_tete :  [ %d ; %d ]", serpent.premier->x, serpent.premier->y);
+        printf("\npos_pomme : [ %d ; %d ]", pos_x_pomme, pos_y_pomme);
+        printf("\npts :         [ %d ]", score);
+        printf("\ntaille :      [ %d ]", serpent.nbMembres);
 
         if (serpent.premier->x == pos_x_pomme && serpent.premier->y == pos_y_pomme)
         {
@@ -63,7 +58,7 @@ int main()
         }
 
         // On ralentit l'exécution pour ne pas que ce soit trop rapide
-        sleep(1);
+        Sleep(250);
 
         if (kbhit())
         {
@@ -90,7 +85,6 @@ int main()
 
     return 0;
 }
-
 ///TODO
 //============================== ◄ SPAWN DE POMME ET COLLISION ► ========================================
 
@@ -102,9 +96,9 @@ int main()
 
 //=================== ◄ FILE PR GERER L'AGRANDISSEMENT DU SERPENT ► ============================
 
-//1 - Création d'une file contenant les position des parties du corps du serpent
+//1 - FAIT Création d'une file contenant les position des parties du corps du serpent
 
-//2 - Lorsque le serpent mange une pomme, on créer un nouveau maillon
+//2 - FAIT Lorsque le serpent mange une pomme, on créer un nouveau maillon
 
 //3 - La tête prends en valeur la nouvelle position (n+1) et la partit suivante prends en valeur la position 'actuelle' (n) ainsi de suite...
 
